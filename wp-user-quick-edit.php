@@ -113,10 +113,15 @@ class WP_User_Quick_Edit {
     }
 
     function get_inlineedit_data( $user_object ) {
+        $user_roles = array_intersect( array_values( $user_object->roles ), array_keys( get_editable_roles() ) );
+        $user_role  = reset( $user_roles );
+
         $html  = '<div class="hidden" id="inline_' . $user_object->ID . '">';
+        $html .= '<div class="ID">'. $user_object->ID. '</div>';
         $html .= '<div class="user_email">'. $user_object->user_email. '</div>';
         $html .= '<div class="first_name">'. $user_object->first_name. '</div>';
         $html .= '<div class="last_name">'. $user_object->last_name. '</div>';
+        $html .= '<div class="role">'. $user_role. '</div>';
         $html .= '</div>';
 
         return $html;

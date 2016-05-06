@@ -1,0 +1,18 @@
+#wpbody-content table.users tr.inline-edit-row-user .inline-edit-col-left {
+  width: 35%;
+}
+#wpbody-content table.users tr.inline-edit-row-user .inline-edit-col-center {
+  width: 30%;
+}
+#wpbody-content table.users tr.inline-edit-row-user .inline-edit-col-right {
+  width: 35%;
+}
+@media screen and (max-width: 782px) {
+  /* Quick Edit and Bulk Edit */
+  #wpbody-content table.users tr.inline-edit-row-user .inline-edit-col-left,
+  #wpbody-content table.users tr.inline-edit-row-user .inline-edit-col-center,
+  #wpbody-content table.users tr.inline-edit-row-user .inline-edit-col-right {
+    float: none;
+    width: 100%;
+  }
+}

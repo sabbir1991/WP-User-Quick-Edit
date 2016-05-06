@@ -15,15 +15,14 @@ module.exports = function(grunt) {
 
             admin: {
                 files: {
-                    '<%= dirs.css %>/admin.css': '<%= dirs.less %>/admin/admin.less',
-                    '<%= dirs.css %>/setup.css': '<%= dirs.less %>/admin/setup.less'
+                    '<%= dirs.css %>/style.css': '<%= dirs.less %>/style.less',
                 }
             }
         },
 
         watch: {
             less: {
-                files: ['<%= dirs.less %>/*.less', '<%= dirs.less %>/admin/*.less' ],
+                files: ['<%= dirs.less %>/*.less'],
                 tasks: ['less:admin'],
                 options: {
                     livereload: true
