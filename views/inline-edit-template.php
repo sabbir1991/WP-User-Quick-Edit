@@ -1,6 +1,10 @@
 <script type="text/html" id="tmpl-user-inline-edit-template">
+    <?php
+        $wp_user_list_table = _get_list_table('WP_Users_List_Table');
+        $column_count = $wp_user_list_table->get_column_count();
+    ?>
     <tr id="edit-{{data.ID}}" class="inline-edit-row inline-edit-row-user inline-edit-user quick-edit-row quick-edit-row-user inline-edit-user">
-        <td colspan="6" class="colspanchange">
+        <td colspan="<?php echo $column_count; ?>" class="colspanchange">
             <fieldset class="inline-edit-col-left">
                 <legend class="inline-edit-legend">Quick Edit</legend>
 

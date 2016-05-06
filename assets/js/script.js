@@ -1,6 +1,8 @@
+var UserInlineEdit;
+
 ;(function($) {
 
-    var UserInlineEdit = {
+    UserInlineEdit = {
 
         init: function() {
             $('table.users').on( 'click', 'a.user-quick-editinline', this.showEditForm );
@@ -127,6 +129,20 @@
 
     $(document).ready(function(){
         UserInlineEdit.init();
+        var $colspan_change = columns.colSpanChange;
+
+        columns.colSpanChange = function( diff ) {
+            $colspan_change.apply( this, arguments );
+            $($('#tmpl').html()).filter('input').length;
+
+            var $t = $($('script[id="tmpl-user-inline-edit-template"]').html()).find('.colspanchange'), n;
+
+            console.log( $t, $t.attr('colspan'), diff );
+
+            n = parseInt( $t.attr('colspan'), 10 ) + diff;
+            console.log(n);
+            $t.attr('colspan', n.toString());
+        }
     });
 
 })(jQuery);

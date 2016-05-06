@@ -61,8 +61,6 @@ class WP_User_Quick_Edit {
         // Localize our plugin
         add_action( 'init', array( $this, 'localization_setup' ) );
 
-        // Loads frontend scripts and styles
-        // add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
         add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 
         add_filter( 'user_row_actions', array( $this, 'add_quick_edit_link' ), 10, 2 );
