@@ -8,6 +8,14 @@ var UserInlineEdit;
             $('table.users').on( 'click', 'a.user-quick-editinline', this.showEditForm );
             $('table.users').on( 'click', 'button.cancel', this.cancelQuickEdit );
             $('table.users').on( 'click', 'button.save', this.saveQuickEdit );
+
+            // prepare the edit rows
+            $('body').keyup(function(e){
+                if ( e.which === 27 ) {
+                    return UserInlineEdit.revert();
+                }
+            });
+
         },
 
         cancelQuickEdit: function(e) {
