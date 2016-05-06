@@ -51,10 +51,14 @@ class WP_User_Quick_Edit {
      * Sets up all the appropriate hooks and actions
      * within our plugin.
      *
+     * @since 1.0.0
+     *
      * @uses register_activation_hook()
      * @uses register_deactivation_hook()
      * @uses is_admin()
      * @uses add_action()
+     *
+     * @return void
      */
     public function __construct() {
 
@@ -75,6 +79,10 @@ class WP_User_Quick_Edit {
      *
      * Checks for an existing WP_User_Quick_Edit() instance
      * and if it doesn't find one, creates it.
+     *
+     * @since 1.0.0
+     *
+     * @return void
      */
     public static function init() {
         static $instance = false;
@@ -89,7 +97,7 @@ class WP_User_Quick_Edit {
     /**
      * Add quick edit link in users row actions
      *
-     * @since 0.1
+     * @since 1.0.0
      *
      * @param array $actions
      * @param object $user_object
@@ -111,7 +119,16 @@ class WP_User_Quick_Edit {
         return $actions;
     }
 
-    function get_inlineedit_data( $user_object ) {
+    /**
+     * Get inline editable data
+     *
+     * @since 1.0.0
+     *
+     * @param  object $user_object
+     *
+     * @return html | string
+     */
+    public function get_inlineedit_data( $user_object ) {
         $user_roles = array_intersect( array_values( $user_object->roles ), array_keys( get_editable_roles() ) );
         $user_role  = reset( $user_roles );
 
@@ -134,6 +151,15 @@ class WP_User_Quick_Edit {
         return $html;
     }
 
+    /**
+     * Display Public name combination
+     *
+     * @since 1.0.0
+     *
+     * @param  object $user
+     *
+     * @return array
+     */
     public function displa_publicaly_name( $user ) {
         $public_display = array();
         $public_display['display_nickname']  = $user->nickname;
@@ -173,21 +199,34 @@ class WP_User_Quick_Edit {
      *
      * Allows plugin assets to be loaded.
      *
+     * @since 1.0.0
+     *
      * @uses wp_enqueue_script()
      * @uses wp_localize_script()
      * @uses wp_enqueue_style
+     *
+     * @return void
      */
     public function enqueue_scripts( $hook ) {
-        wp_enqueue_style( 'wpu-quick-edit-styles', plugins_url( 'assets/css/style.css', __FILE__ ), false, date( 'Ymd' ) );
-        wp_enqueue_script( 'wpu-quick-edit-scripts', plugins_url( 'assets/js/script.js', __FILE__ ), array( 'jquery' ), false, true );
+        if ( 'users.php' === $hook ) {
+            wp_enqueue_style( 'wpu-quick-edit-styles', plugins_url( 'assets/css/style.css', __FILE__ ), false, date( 'Ymd' ) );
+            wp_enqueue_script( 'wpu-quick-edit-scripts', plugins_url( 'assets/js/script.js', __FILE__ ), array( 'jquery' ), false, true );
 
-        $localize_array = array(
-            'ajaxurl' => admin_url( 'admin-ajax.php' ),
-            'nonce'   => wp_create_nonce( 'wp-user-quick-edit' )
-        );
-        wp_localize_script( 'wpu-quick-edit-scripts', 'wpUserQE', $localize_array );
+            $localize_array = array(
+                'ajaxurl' => admin_url( 'admin-ajax.php' ),
+                'nonce'   => wp_create_nonce( 'wp-user-quick-edit' )
+            );
+            wp_localize_script( 'wpu-quick-edit-scripts', 'wpUserQE', $localize_array );
+        }
     }
 
+    /**
+     * Load js template for user inline edit
+     *
+     * @since 1.0.0
+     *
+     * @return void
+     */
     public function load_inline_edit_template() {
         global $current_screen;
 
@@ -196,9 +235,20 @@ class WP_User_Quick_Edit {
         }
     }
 
+    /**
+     * Save inline edit data
+     *
+     * @since 1.0.0
+     *
+     * @return json
+     */
     public function save_inline_edit() {
         if ( ! isset( $_REQUEST['_wpnonce'] ) || ! wp_verify_nonce( $_REQUEST['_wpnonce'], 'wp-user-quick-edit' ) ) {
             wp_send_json_error( __( 'Error: Nonce verification failed', 'wpu-quick-edit' ) );
+        }
+
+        if ( ! is_user_logged_in() || ! is_admin() ) {
+            wp_send_json_error( __( 'Sorry, access denied', 'wpu-quick-edit' ) );
         }
 
         if ( ! current_user_can('edit_user') ) {
