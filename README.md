@@ -1,5 +1,5 @@
-# WP-User-Quick-Edit
-Quick editing functionality for WordPress WP users menu
+# WP User Quick Edit
+Quick edit functionality for WordPress users
 
 # Screenshot
 ![Show Quick edit bulk action link](https://db.tt/vD8eMACG)
