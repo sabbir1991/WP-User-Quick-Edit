@@ -142,18 +142,6 @@ var UserInlineEdit;
 
     $(document).ready(function(){
         UserInlineEdit.init();
-        // var $colspan_change = columns.colSpanChange;
-
-        // columns.colSpanChange = function( diff ) {
-        //     $colspan_change.apply( this, arguments );
-
-        //     var $t = $($('script[id="tmpl-user-inline-edit-template"]').html()), n;
-
-        //     $td = $t.find('td.colspanchange');
-        //     n = parseInt( $td.attr('colspan'), 10 ) + diff;
-        //     $td.attr('colspan', n.toString());
-
-        // }
     });
 
 })(jQuery);
