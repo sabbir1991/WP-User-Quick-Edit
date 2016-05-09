@@ -137,13 +137,13 @@ class WP_User_Quick_Edit {
         $html .= '<div class="rich_editing">'. $user_object->rich_editing. '</div>';
         $html .= '<div class="comment_shortcuts">'. $user_object->comment_shortcuts. '</div>';
         $html .= '<div class="admin_bar_front">'. $user_object->show_admin_bar_front. '</div>';
-        $html .= '<div class="user_email">'. $user_object->user_email. '</div>';
+        $html .= '<div class="email">'. $user_object->user_email. '</div>';
         $html .= '<div class="first_name">'. $user_object->first_name. '</div>';
         $html .= '<div class="last_name">'. $user_object->last_name. '</div>';
         $html .= '<div class="nickname">'. $user_object->nickname. '</div>';
         $html .= '<div class="description">'. $user_object->description. '</div>';
         $html .= '<div class="role">'. $user_role. '</div>';
-        $html .= '<div class="user_url">'. $user_object->user_url . '</div>';
+        $html .= '<div class="url">'. $user_object->user_url . '</div>';
         $html .= '<div class="display_name">'. $user_object->display_name. '</div>';
         $html .= '<div class="display_name_options">'. implode( ',', $this->displa_publicaly_name( $user_object ) ). '</div>';
         $html .= '</div>';

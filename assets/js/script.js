@@ -23,8 +23,7 @@ var UserInlineEdit;
             UserInlineEdit.revert();
         },
 
-        showEditForm: function(e) {
-            e.preventDefault();
+        showEditForm: function() {
 
             UserInlineEdit.revert();
 
@@ -32,60 +31,57 @@ var UserInlineEdit;
                 userID = self.data('id'),
                 data = {};
 
-            $rawData = self.closest('span.inline').find( '#inline_' + userID );
+            fields = ['email', 'first_name', 'last_name', 'nickname', 'description', 'role', 'url', 'display_name' ];
 
-            $.each( $rawData.find( 'div' ), function( i, val ) {
-                data[$(val).attr('class')] = $(val).text();
+            editRow = $('#inline-edit').clone(true);
+
+            $( 'td', editRow ).attr( 'colspan', $( 'th:visible, td:visible', '.widefat:first thead' ).length );
+
+            $( '#user-' + userID ).removeClass('is-expanded').hide().after(editRow).after('<tr class="hidden"></tr>');
+
+            rowData = self.closest('span.inline').find( '#inline_' + userID );
+
+            $.each( $('.display_name_options', rowData ).text().split(','), function( i, val ) {
+                $( 'select[name="display_name"]', editRow ).append($("<option></option>").text(val) );
             } );
 
-            $html = wp.template('user-inline-edit-template')(data);
+            for ( f = 0; f < fields.length; f++ ) {
+                val = $('.'+fields[f], rowData);
+                val = val.text();
+                $(':input[name="' + fields[f] + '"]', editRow).val( val );
+            }
 
+            if ( $( '.rich_editing', rowData ).text() === 'false' ) {
+                $( 'input[name="rich_editing"]', editRow ).prop( 'checked', true );
+            }
+            if ( $( '.comment_shortcuts', rowData ).text() === 'true' ) {
+                $( 'input[name="comment_shortcuts"]', editRow ).prop( 'checked', true );
+            }
+            if ( $( '.admin_bar_front', rowData ).text() === 'true' ) {
+                $( 'input[name="admin_bar_front"]', editRow ).prop( 'checked', true );
+            }
 
-            $( 'td', $html ).attr( 'colspan', $( 'th:visible, td:visible', '.widefat:first thead' ).length );
+            $(editRow).attr('id', 'edit-'+userID).addClass('inline-editor').show();
+            $('.ptitle', editRow).focus();
 
-            $('#user-'+userID).removeClass('is-expanded').hide().after($html).after('<tr class="hidden"></tr>');
-
-
-
-            $('tr#edit-'+userID).addClass('inline-editor');
-            // $($html).find('tr#edit-'+userID).addClass('inline-editor').show();
-            $('.ptitle', $html).focus();
-
-            $('tr.inline-edit-row').find( 'select.select-field[data-selected]' ).each(function() {
-                var self = $(this),
-                    selected = self.data('selected');
-
-                if ( selected !== '' ) {
-                    self.val( selected );
-                }
-            });
-
-            $('tr.inline-edit-row').find( 'input[type="checkbox"][data-checked]' ).each(function() {
-                var self = $(this),
-                    checked = self.data('checked');
-
-                    if ( ( checked == ( self.val() == 'true' || self.val() == '1' ) ) ) {
-                        self.prop('checked', true );
-                    } else {
-                        self.prop('checked', false );
-                    };
-            });
-
+            return false;
         },
 
-        saveQuickEdit: function(e) {
-            e.preventDefault();
+        saveQuickEdit: function() {
             var self = $(this),
                 params,
                 fields;
 
-            var id = self.closest('p.inline-edit-save').find('input[name="user_id"]').val();
+            if ( typeof(this) === 'object' ) {
+                id = UserInlineEdit.getId(this);
+            }
 
             $( 'table.widefat .spinner' ).addClass( 'is-active' );
 
             params = {
                 action: 'user-inline-save',
                 _wpnonce: wpUserQE.nonce,
+                user_id: id
             };
 
             fields = $('#edit-'+id).find(':input').serialize();
@@ -116,7 +112,16 @@ var UserInlineEdit;
                     }
                 },
             'html');
+
+            return false;
         },
+
+        getId : function(o) {
+            var id = $(o).closest('tr').attr('id'),
+                parts = id.split('-');
+            return parts[parts.length - 1];
+        },
+
 
         // Revert is for both Quick Edit and Bulk Edit.
         revert : function(){
@@ -137,16 +142,18 @@ var UserInlineEdit;
 
     $(document).ready(function(){
         UserInlineEdit.init();
-        var $colspan_change = columns.colSpanChange;
+        // var $colspan_change = columns.colSpanChange;
 
-        columns.colSpanChange = function( diff ) {
-            $colspan_change.apply( this, arguments );
+        // columns.colSpanChange = function( diff ) {
+        //     $colspan_change.apply( this, arguments );
 
-            var $t = $($('script[id="tmpl-user-inline-edit-template"]').html()).find('.colspanchange'), n;
+        //     var $t = $($('script[id="tmpl-user-inline-edit-template"]').html()), n;
 
-            n = parseInt( $t.attr('colspan'), 10 ) + diff;
-            $t.attr('colspan', n.toString());
-        }
+        //     $td = $t.find('td.colspanchange');
+        //     n = parseInt( $td.attr('colspan'), 10 ) + diff;
+        //     $td.attr('colspan', n.toString());
+
+        // }
     });
 
 })(jQuery);
