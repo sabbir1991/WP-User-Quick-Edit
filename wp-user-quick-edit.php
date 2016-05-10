@@ -265,11 +265,11 @@ class WP_User_Quick_Edit {
             wp_send_json_error( $result->get_error_messages() );
         }
 
-        $wp_user_list_table = _get_list_table('WP_Users_List_Table');
+        $wp_user_list_table = _get_list_table('WP_Users_List_Table', array( 'screen' => 'users' ) );
 
         $user_obj = get_userdata( $_POST['user_id'] );
         ob_start();
-        echo $wp_user_list_table->single_row( $user_obj );
+        echo $wp_user_list_table->single_row( $user_obj, '', '', count_user_posts( $user_obj->ID ) );
         $output = ob_get_clean();
 
         wp_send_json_success( $output );
